@@ -1,0 +1,69 @@
+export default {
+  gameId: 2,
+  gameName: 'xocxoc',
+  hostingPort: 5000,
+  apiSettings: {
+    enabledApi: true,
+    apiUrl: 'http://l2_game_api_uat:5000',
+    authUrl: 'http://l2_auth_api_uat:5000',
+    client: {
+      id: 'game-server',
+      secret: 'gameserver@20luminet&',
+    },
+    useAuthenticate: true,
+    placeBetTimeout: 4500,
+    requestTimeout: 10000, // 10s
+    enabledApiLogs: true,
+  },
+  mainServerApiSettings: {
+    url: 'http://l2_game_server_uat:5000/api',
+    auth: {
+      url: 'http://l2_auth_api_uat:5000',
+      id: 'game-services',
+      secret: 'gameservices@20luminet&',
+    },
+    requestTimeout: 10000,
+    useAuthenticate: true,
+  },
+  socketOptions: {
+    pingInterval: 60 * 1000,
+    pingTimeout: 60 * 1000,
+    transports: ['websocket'],
+    allowUpgrades: false,
+    perMessageDeflate: false,
+  },
+  enabledLogs: true,
+  database: {
+    url: 'mongodb://lmn_backend:LmnBackend%4022027@10.99.99.187:37201/?replicaSet=SabaL2UAT',
+    options: {
+      dbName: 'minigame',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      auto_reconnect: true,
+    },
+  },
+  sentry: {
+    sentryUrl: 'http://8ac47fca6d3e4a41908896a64ef201ac@10.2.189.51:9009/53',
+    logIdentifier: 'lucky-wheel',
+    env: 'UAT',
+  },
+  authenticateSettings: {
+    audiences: ['api', 'admin-api'],
+  },
+  adminSecretKey: 'asWDEerfOIdgsdqRTFabvmgh',
+  enableCorsWs: true,
+  corsUrls: [
+    'http://uat.v-gaming.net',
+    'https://uat.v-gaming.net',
+    'http://uatadm.v-gaming.net',
+    'https://uatadm.v-gaming.net',
+    'http://muat.v-gaming.net',
+    'https://muat.v-gaming.net',
+    'http://l2uat.sgamesuat.com',
+    'https://l2uat.sgamesuat.com',
+    'http://l2uatadm.sgamesuat.com',
+    'https://l2uatadm.sgamesuat.com',
+    'http://l2uatm.sgamesuat.com',
+    'https://l2uatm.sgamesuat.com',
+  ],
+};
