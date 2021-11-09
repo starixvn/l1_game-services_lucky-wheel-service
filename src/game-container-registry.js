@@ -3,12 +3,13 @@ const { asClass, asValue } = awilix;
 import { Core } from 'sc-game-base';
 import { GameCron, GameProcessBetQueue } from './crons';
 import { Spins, SpinResults } from './models';
+import { GameHistoryQuery, GameLogQuery } from './query-apis';
+import GameSocketRouter from './routers/game-socket-router';
 import {
   GamePlaceBetConsumer,
   GameSettleRoundConsumer,
+  GameInGameConsumer,
 } from './event-consumers';
-import { GameHistoryQuery, GameLogQuery } from './query-apis';
-import GameSocketRouter from './routers/game-socket-router';
 
 export default class GameContainerRegistry extends Core.ContainerRegistry {
   registerModels() {
@@ -30,6 +31,7 @@ export default class GameContainerRegistry extends Core.ContainerRegistry {
   registerConsumers() {
     super.registerConsumers();
     this.container.register({
+      inGameConsumer: asClass(GameInGameConsumer).singleton(),
       placeBetConsumer: asClass(GamePlaceBetConsumer).singleton(),
       settleGameRoundConsumer: asClass(GameSettleRoundConsumer)
         .singleton()

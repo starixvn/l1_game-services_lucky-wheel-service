@@ -58,7 +58,7 @@ describe('game-history-query', () => {
 
       //assert
       expect(actualValue).toStrictEqual({
-        history: { spinHistories: [], page: 2, pageSize: 8, total: 3 },
+        history: { betLogs: [], page: 2, pageSize: 8, total: 3 },
       });
     });
   });

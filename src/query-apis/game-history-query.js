@@ -20,7 +20,7 @@ export default class GameHistoryQuery {
       __archive: false,
     };
 
-    const spinHistories = await this.betsRepository
+    const betLogs = await this.betsRepository
       .find(filter, betProjection, {
         sort: { _id: -1 },
         skip: numberOfSkippedBets,
@@ -29,6 +29,6 @@ export default class GameHistoryQuery {
       .lean()
       .exec();
 
-    return { history: { spinHistories, page, pageSize, total } };
+    return { history: { betLogs, page, pageSize, total } };
   }
 }

@@ -81,6 +81,7 @@ describe('game-container-registry', () => {
 
       //assert
       expect(containerRegistry.container.register).toBeCalledWith({
+        inGameConsumer: expect.any(Object),
         placeBetConsumer: expect.any(Object),
         settleGameRoundConsumer: expect.any(Function),
       });
