@@ -123,19 +123,19 @@ describe('game-process-bet-queue', () => {
         config: null,
         expectedFailure: true,
         expectedUM: true,
-        expectedMessage: 'disabled',
+        expectedMessage: ["disabled"],
       },
       {
         config: { enabled: false },
         expectedFailure: true,
         expectedUM: true,
-        expectedMessage: 'disabled',
+        expectedMessage: ["disabled"],
       },
       {
         config: { enabled: true },
         expectedFailure: false,
         expectedUM: false,
-        expectedMessage: '',
+        expectedMessage: [],
       },
     ];
 
@@ -157,7 +157,7 @@ describe('game-process-bet-queue', () => {
       notificationRepository
         .findOne()
         .lean()
-        .exec.mockReturnValueOnce('disabled');
+        .exec.mockReturnValueOnce({ messages: ["disabled"] });
 
       const definition = {};
       const processBetQueue = new GameProcessBetQueue({
@@ -169,7 +169,7 @@ describe('game-process-bet-queue', () => {
 
       const expectedValue = {
         failure: testCase.expectedFailure,
-        notice: { message: testCase.expectedMessage },
+        notice: { um: testCase.expectedUM, message: testCase.expectedMessage },
         um: testCase.expectedUM,
       };
 

@@ -2,7 +2,7 @@ import { Core } from 'sc-game-base';
 import constants from '../constants';
 
 export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
-  constructor(params) {
+  constructor(params) { 
     super(params);
     this.gameConfigsRepository = params.gameConfigsRepository;
     this.userInfosRepository = params.userInfosRepository;
@@ -41,8 +41,8 @@ export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
           .findOne({ gameName, displayKind: 2 }, 'messages')
           .lean()
           .exec()
-      : '';
-
+      : { messages: [] };
+ 
     return [
       {
         failure: !userSpin || userSpin?.availSpins < 1,
@@ -51,7 +51,7 @@ export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
       {
         failure: disabled,
         um: disabled,
-        notice: { message: disabledMessages },
+        notice: { um: disabled, message: disabledMessages?.messages },
       },
     ];
   }
