@@ -64,6 +64,7 @@ describe('game-container-registry', () => {
 
             //assert
             expect(containerRegistry.container.register).toBeCalledWith({
+                gameCron: expect.any(Function),
                 processBetQueue: expect.any(Function),
             });
         });
@@ -116,6 +117,22 @@ describe('game-container-registry', () => {
             //assert
             expect(containerRegistry.container.register).toBeCalledWith({
                 socketRouter: expect.any(Function),
+            });
+        });
+    });
+
+    describe('registerValidators', () => {
+        it('should register correct validators', () => {
+            // arrange
+            const containerRegistry = new GameContainerRegistry(defaultInjectionMode);
+            containerRegistry.container = { register: jest.fn() };
+
+            // act
+            containerRegistry.registerValidators();
+
+            //assert
+            expect(containerRegistry.container.register).toBeCalledWith({
+                playGamePermissionValidator: expect.any(Object),
             });
         });
     });

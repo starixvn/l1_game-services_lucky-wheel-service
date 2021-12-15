@@ -1,11 +1,12 @@
 import awilix from 'awilix';
 const { asClass, asValue } = awilix;
 import { Core } from 'sc-game-base';
-import { GameProcessBetQueue } from './crons';
+import { GameCron, GameProcessBetQueue } from './crons';
 import { Spins, SpinResults } from './models';
 import { GameHistoryQuery, GameLogQuery } from './query-apis';
 import GameSocketRouter from './routers/game-socket-router';
 import { GamePlaceBetConsumer, GameSettleRoundConsumer, GameInGameConsumer } from './event-consumers';
+import { PlayGamePermissionValidator } from './validators';
 
 export default class GameContainerRegistry extends Core.ContainerRegistry {
     registerModels() {
@@ -18,8 +19,8 @@ export default class GameContainerRegistry extends Core.ContainerRegistry {
     }
 
     registerCrons() {
-        super.registerCrons();
         this.container.register({
+            gameCron: asClass(GameCron).singleton().proxy(),
             processBetQueue: asClass(GameProcessBetQueue).singleton().proxy(),
         });
     }
@@ -45,6 +46,12 @@ export default class GameContainerRegistry extends Core.ContainerRegistry {
         super.registerRouters();
         this.container.register({
             socketRouter: asClass(GameSocketRouter).proxy(),
+        });
+    }
+
+    registerValidators() {
+        this.container.register({
+            playGamePermissionValidator: asClass(PlayGamePermissionValidator).singleton(),
         });
     }
 }
