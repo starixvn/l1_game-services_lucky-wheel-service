@@ -1,3 +1,3 @@
 export default class GameCron {
-  async start() {}
+    async start() {}
 }

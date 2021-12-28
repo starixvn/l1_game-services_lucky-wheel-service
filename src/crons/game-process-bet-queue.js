@@ -2,106 +2,89 @@ import { Core } from 'sc-game-base';
 import constants from '../constants';
 
 export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
-  constructor(params) { 
-    super(params);
-    this.gameConfigsRepository = params.gameConfigsRepository;
-    this.userInfosRepository = params.userInfosRepository;
-    this.spinResultsRepository = params.betsRepository;
-    this.roundsRepository = params.roundsRepository;
-    this.notificationRepository = params.notificationRepository;
-    this.settleGameRoundConsumer = params.settleGameRoundConsumer;
-  }
-
-  async proceedBet(player, payload) {
-    if (!(await this.validateBetRequest(player, payload))) {
-      return;
+    constructor(params) {
+        super(params);
+        this.gameConfigsRepository = params.gameConfigsRepository;
+        this.userInfosRepository = params.userInfosRepository;
+        this.spinResultsRepository = params.betsRepository;
+        this.roundsRepository = params.roundsRepository;
+        this.notificationRepository = params.notificationRepository;
+        this.settleGameRoundConsumer = params.settleGameRoundConsumer;
     }
 
-    await this.handleSuccessBet(player, payload);
-  }
+    async proceedBet(player, payload) {
+        if (!(await this.validateBetRequest(player, payload))) {
+            return;
+        }
 
-  async composeValidationCriteria(player, payload) {
-    const gameName = this.definition.configName;
-    const config = await this.gameConfigsRepository
-      .findOne({ name: gameName })
-      .lean()
-      .exec();
-    let disabled = true;
-    if (!!config) {
-      const { enabled } = config;
-      disabled = !enabled;
+        await this.handleSuccessBet(player, payload);
     }
 
-    const userSpin = await this.roundsRepository
-      .findOne({ memberId: payload, enabled: true })
-      .lean()
-      .exec();
-    const disabledMessages = disabled
-      ? await this.notificationRepository
-          .findOne({ gameName, displayKind: 2 }, 'messages')
-          .lean()
-          .exec()
-      : { messages: [] };
- 
-    return [
-      {
-        failure: !userSpin || userSpin?.availSpins < 1,
-        notice: { message: { errorCode: constants.notEnoughSpin } },
-      },
-      {
-        failure: disabled,
-        um: disabled,
-        notice: { um: disabled, message: disabledMessages?.messages },
-      },
-    ];
-  }
+    async composeValidationCriteria(player, payload) {
+        const gameName = this.definition.configName;
+        const config = await this.gameConfigsRepository.findOne({ name: gameName }).lean().exec();
+        let disabled = true;
+        if (!!config) {
+            const { enabled } = config;
+            disabled = !enabled;
+        }
 
-  handleFailedBet(player, notice, bet) {
-    const payload = notice.um
-      ? { um: true, um_message: notice.message }
-      : { notice: notice.message, endBet: -1 };
+        const userSpin = await this.roundsRepository.findOne({ memberId: payload, enabled: true }).lean().exec();
+        const disabledMessages = disabled
+            ? await this.notificationRepository.findOne({ gameName, displayKind: 2 }, 'messages').lean().exec()
+            : { messages: [] };
 
-    this.placeBetPublisher.publishGameFailedBet(player.UID, payload);
-  }
+        return [
+            {
+                failure: !userSpin || userSpin?.availSpins < 1,
+                notice: { message: { errorCode: constants.notEnoughSpin } },
+            },
+            {
+                failure: disabled,
+                um: disabled,
+                notice: { um: disabled, message: disabledMessages?.messages },
+            },
+        ];
+    }
 
-  async handleSuccessBet(player, payload) {
-    const result = this.definition.generateResult();
-    const coins = this.definition.choices[result];
+    handleFailedBet(player, notice, bet) {
+        const payload = notice.um ? { um: true, um_message: notice.message } : { notice: notice.message, endBet: -1 };
 
-    await this.insertRound(player, coins);
+        this.placeBetPublisher.publishGameFailedBet(player.UID, payload);
+    }
 
-    const userSpin = await this.roundsRepository
-      .findOne({ memberId: payload })
-      .lean()
-      .exec();
+    async handleSuccessBet(player, payload) {
+        const result = this.definition.generateResult();
+        const coins = this.definition.choices[result];
 
-    const user = await this.userInfosRepository
-      .findOne({ id: player.UID })
-      .lean()
-      .exec();
+        await this.insertRound(player, coins);
 
-    const status = {
-      coins,
-      availSpins: userSpin.availSpins - 1,
-      totalCoins: user ? user.scoins + coins : 0,
-    };
+        const userSpin = await this.roundsRepository.findOne({ memberId: payload }).lean().exec();
 
-    await this.settleGameRoundConsumer.settle(player.UID, payload, coins);
-    this.notifyPlacingBetResult(player, status);
-  }
+        const user = await this.userInfosRepository.findOne({ id: player.UID }).lean().exec();
 
-  notifyPlacingBetResult(player, status) {
-    this.placeBetPublisher.publishSuccessBet(player.UID, { status });
-  }
+        const status = {
+            coins,
+            availSpins: userSpin.availSpins - 1,
+            totalCoins: user ? user.scoins + coins : 0,
+        };
 
-  async insertRound(player, coins) {
-    await this.spinResultsRepository.create({
-      uid: player.UID,
-      name: player.profile?.name,
-      result: coins,
-      memberId: player.session?.memberId,
-      siteId: player.session?.siteId,
-      time: new Date(),
-    });
-  }
+        await this.settleGameRoundConsumer.settle(player.UID, payload, coins);
+        this.notifyPlacingBetResult(player, status);
+    }
+
+    notifyPlacingBetResult(player, status) {
+        this.placeBetPublisher.publishSuccessBet(player.UID, { status });
+    }
+
+    async insertRound(player, coins) {
+        await this.spinResultsRepository.create({
+            uid: player.UID,
+            name: player.profile?.name,
+            result: coins,
+            memberId: player.session?.memberId,
+            siteId: player.session?.siteId,
+            time: new Date(),
+        });
+    }
 }
