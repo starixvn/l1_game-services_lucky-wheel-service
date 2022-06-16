@@ -66,4 +66,5 @@ export default {
     'http://l2sitm.sgamesuat.com',
     'https://l2sitm.sgamesuat.com',
   ],
+	enableMsgpackParser: true,
 };

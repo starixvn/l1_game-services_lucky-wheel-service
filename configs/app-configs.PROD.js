@@ -66,4 +66,5 @@ export default {
     'http://m2.v-gaming.net',
     'https://m2.v-gaming.net',
   ],
+	enableMsgpackParser: true,
 };
