@@ -12,7 +12,7 @@ export default {
     },
     useAuthenticate: true,
     requestTimeout: 10000,
-    placeBetTimeout: 4500,
+    placeBetTimeout: 4000,
     enabledApiLogs: true,
   },
   socketOptions: {
