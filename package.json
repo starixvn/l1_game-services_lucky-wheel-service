@@ -22,7 +22,7 @@
   "dependencies": {
     "mongoose-auto-increment-reworked": "^1.2.1",
     "nodemon": "^2.0.4",
-    "sc-game-base": "3.0.4-beta.1"
+    "sc-game-base": "3.0.5-beta.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
