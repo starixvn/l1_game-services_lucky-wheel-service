@@ -44,7 +44,7 @@ describe('game-history-query', () => {
         },
       };
 
-      const gameHistoryQuery = new GameHistoryQuery(betsRepository);
+      const gameHistoryQuery = new GameHistoryQuery(betsRepository); 
       const player = {};
       const page = 2;
       const pageSize = 8;

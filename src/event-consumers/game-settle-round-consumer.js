@@ -6,7 +6,7 @@ export default class GameSettleRoundConsumer {
 
   async settle(memberId, payload, coins) {
     await this.roundsRepository.updateOne(
-      { memberId: payload },
+      { playerId: payload },
       { $inc: { availSpins: -1, usedSpins: 1 } }
     );
 

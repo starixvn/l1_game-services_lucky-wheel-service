@@ -27,7 +27,7 @@ export default class GamePlaceBetConsumer {
 
     this.gameData.ingame[name].betQueue.push({
       player,
-      payload: player.session.memberId,
+      payload: player.session.playerId,
     });
   }
 }
