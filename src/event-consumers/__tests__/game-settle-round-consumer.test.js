@@ -22,7 +22,7 @@ describe('game-settle-round-consumer', () => {
 
       //assert
       expect(roundsRepository.updateOne).toBeCalledWith(
-        { memberId: 1 },
+        { playerId: 1 },
         { $inc: { availSpins: -1, usedSpins: 1 } }
       );
     });
