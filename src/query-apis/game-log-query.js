@@ -48,7 +48,7 @@ export default class GameLogQuery {
     };
 
     const spins = await this.roundsRepository
-      .findOne({ memberId: player.session.memberId, enabled: true })
+      .findOne({ playerId: player.session.playerId, enabled: true })
       .lean()
       .exec();
 

@@ -16,6 +16,7 @@ export default class GameHistoryQuery {
       uid: false,
       siteId: false,
       memberId: false,
+      playerId: false,
       __v: false,
       __archive: false,
     };

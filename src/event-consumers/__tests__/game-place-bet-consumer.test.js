@@ -39,7 +39,7 @@ describe('game-place-bet-consumer', () => {
       const gameData = { ingame: {} };
       const consumer = new GamePlaceBetConsumer(null, gameData);
       const player = {
-        session: { memberId: 1 },
+        session: { playerId: 1 },
         profile: { name: 'PlayerName' },
       };
 
@@ -69,7 +69,7 @@ describe('game-place-bet-consumer', () => {
       };
       const consumer = new GamePlaceBetConsumer(null, gameData);
       const player = {
-        session: { memberId: 1 },
+        session: { playerId: 1 },
         profile: { name: 'PlayerName' },
       };
 

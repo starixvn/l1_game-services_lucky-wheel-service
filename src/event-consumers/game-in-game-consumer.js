@@ -43,8 +43,8 @@ export default class GameInGameConsumer {
     }
 
     async getPlayerAvailableSpins(realPlayer) {
-        const memberId = realPlayer.session?.memberId;
-        const userSpins = await this.roundsRepository.findOne({ memberId }).lean().exec();
+        const playerId = realPlayer.session?.playerId;
+        const userSpins = await this.roundsRepository.findOne({ playerId }).lean().exec();
         return userSpins?.availSpins ?? 0;
     }
 

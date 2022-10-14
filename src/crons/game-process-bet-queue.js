@@ -29,7 +29,7 @@ export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
             disabled = !enabled;
         }
 
-        const userSpin = await this.roundsRepository.findOne({ memberId: payload, enabled: true }).lean().exec();
+        const userSpin = await this.roundsRepository.findOne({ playerId: payload, enabled: true }).lean().exec();
         const disabledMessages = disabled
             ? await this.notificationRepository.findOne({ gameName, displayKind: 2 }, 'messages').lean().exec()
             : { messages: [] };
@@ -59,7 +59,7 @@ export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
 
         await this.insertRound(player, coins);
 
-        const userSpin = await this.roundsRepository.findOne({ memberId: payload }).lean().exec();
+        const userSpin = await this.roundsRepository.findOne({ playerId: payload }).lean().exec();
 
         const user = await this.userInfosRepository.findOne({ id: player.UID }).lean().exec();
 
@@ -82,7 +82,8 @@ export default class GameProcessBetQueue extends Core.Crons.ProcessBetQueue {
             uid: player.UID,
             name: player.profile?.name,
             result: coins,
-            memberId: player.session?.memberId,
+            memberId: player.session?.playerId,
+            playerId: player.session?.playerId,
             siteId: player.session?.siteId,
             time: new Date(),
         });
