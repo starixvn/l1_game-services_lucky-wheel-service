@@ -1,4 +1,9 @@
+variables:
+    SMOKE_PRODUCT_NAME: 4
+    DOCKER_SLIM: enable
+    ENABLE_NODEJS_INTEGRATION_TEST: 'false'
+  
 include:
-  - project: "ci/repos-ci/pentagon_l2_lucky_wheel_service"
-    ref: master
-    file: "gitlab-ci.yml"
+  - project: "ci/core-cicd"
+    ref: main
+    file: "luminet.gitlab-ci.yml"
