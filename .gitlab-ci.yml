@@ -1,6 +1,5 @@
 variables:
     SMOKE_PRODUCT_NAME: 4
-    DOCKER_SLIM: enable
     ENABLE_NODEJS_INTEGRATION_TEST: 'false'
   
 include:
