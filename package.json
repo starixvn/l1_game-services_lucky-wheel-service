@@ -1,0 +1,46 @@
+{
+    "name": "lucky-wheel-service",
+    "version": "1.0.0",
+    "description": "",
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "main": "./src/app.js",
+    "scripts": {
+        "test": "jest",
+        "test-coverage": "jest --collect-coverage",
+        "dev": "nodemon --es-module-specifier-resolution=node --watch ./src ./src/app.js",
+        "debug": "nodemon --es-module-specifier-resolution=node --watch ./ --inspect ./src/app.js",
+        "prod": "node --max-old-space-size=8192 --es-module-specifier-resolution=node ./src/app.js",
+        "reg": "npm set registry http://npm.lumigame.com"
+    },
+    "jestSonar": {
+        "reportPath": "reports",
+        "reportFile": "test-reporter.xml",
+        "indent": 4
+    },
+    "dependencies": {
+        "mongoose-auto-increment-reworked": "^1.2.1",
+        "sc-game-base": "3.3.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.14.3",
+        "@babel/preset-env": "^7.14.2",
+        "@commitlint/cli": "^9.1.2",
+        "@commitlint/config-conventional": "^9.1.2",
+        "@types/jest": "^26.0.23",
+        "babel-jest": "^27.0.1",
+        "husky": "^4.2.5",
+        "install": "^0.13.0",
+        "jest": "^26.6.3",
+        "jest-extended": "^0.11.5",
+        "jest-micro-auto-stub": "^1.0.5",
+        "jest-sonar-reporter": "^2.0.0",
+        "nodemon": "^2.0.4"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
+    }
+}

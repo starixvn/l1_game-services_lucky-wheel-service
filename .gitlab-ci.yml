@@ -1,0 +1,8 @@
+variables:
+    SMOKE_PRODUCT_NAME: 4
+    ENABLE_NODEJS_INTEGRATION_TEST: 'false'
+  
+include:
+  - project: "ci/core-cicd"
+    ref: main
+    file: "luminet.gitlab-ci.yml"
